@@ -178,7 +178,56 @@ const RestaurantsManager = (function () {
             return this;
         }
 
+        assignCategoryToDish(category, dish) {
+            // Verificar si la categoría y el plato son objetos válidos
+            if (!category || !dish) {
+                throw new EmptyValueException();
+            }
 
+            // Verificar si la categoría y el plato existen en el sistema
+            if (this.#categories.has(category.getName())) {
+
+                if (this.#dishes.has(dish.getName())) {
+                    // Obtener la categoría existente y el plato existente
+                    const actualDish = this.#dishes.get(dish.getName());
+
+                    // Actualizar la información del plato en el mapa de platos
+                    actualDish.dishCategory.push(category);
+
+                }
+
+            } else {
+                this.addCategory(category);
+                this.addDish(dish);
+                // Agregar la categoría al array de categorías del plato
+                this.#dishes.get(dish.getName()).dishCategory.push(category);
+            }
+
+            return this;
+        }
+
+        deassingCategoryFromDish(category, dish) {
+            // Verificar si la categoría y el plato son objetos válidos
+            if (!category || !dish) {
+                throw new EmptyValueException();
+            }
+
+            // Obtener el objeto del plato
+            if (this.#categories.has(category.getName()) && this.#dishes.has(dish.getName())) {
+                for (let [name, value] of this.#dishes) {
+
+                    let pos = value.dishCategory.findIndex((element) => element.getName() === category.getName());
+
+                    if (pos !== -1) {
+                        value.dishCategory.splice(pos, 1);
+                        break; // Si se encuentra, salimos del bucle externo
+                    }
+                }
+
+            }
+
+            return this;
+        }
 
     }
 
