@@ -16,3 +16,21 @@ BaseException.prototype = Object.create(Error.prototype, {
         configurable: true
     }
 });
+
+function InvalidConstructorException() {
+    let instance = BaseException.call(this, "No se ha instanciado el objeto con new");
+    instance.name = "EmptyValueException";
+    return instance;
+}
+
+InvalidConstructorException.prototype = Object.create(BaseException.prototype);
+InvalidConstructorException.prototype.constructor = InvalidConstructorException;
+
+function EmptyValueException() {
+    let instance = BaseException.call(this, "No se puede dejar ningún valor vacío");
+    instance.name = "EmptyValueException";
+    return instance;
+}
+
+EmptyValueException.prototype = Object.create(BaseException.prototype);
+EmptyValueException.prototype.constructor = EmptyValueException;
