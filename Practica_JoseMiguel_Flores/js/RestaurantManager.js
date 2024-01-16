@@ -13,8 +13,23 @@ const RestaurantsManager = (function () {
         #restaurants = new Map();
 
         constructor(name = "Restaurant Manager") {
-
             this.#name = name;
+        }
+
+        etCategories() {
+            return this.#categories[Symbol.iterator]();
+        }
+
+        getMenus() {
+            return this.#menus[Symbol.iterator]();
+        }
+
+        getAllergens() {
+            return this.#allergens[Symbol.iterator]();
+        }
+
+        getRestaurants() {
+            return this.#restaurants[Symbol.iterator]();
         }
 
     }
