@@ -34,3 +34,22 @@ function EmptyValueException() {
 
 EmptyValueException.prototype = Object.create(BaseException.prototype);
 EmptyValueException.prototype.constructor = EmptyValueException;
+
+function InvalidObjectException() {
+    let instance = BaseException.call(this, "No es posible añadir el objeto");
+    instance.name = "InvalidObjectException";
+    return instance;
+}
+
+InvalidObjectException.prototype = Object.create(BaseException.prototype);
+InvalidObjectException.prototype.constructor = InvalidObjectException;
+
+
+function RegisteredObjectException() {
+    let instance = BaseException.call(this, "El objeto ya existe");
+    instance.name = "RegisteredObjectException";
+    return instance;
+}
+
+RegisteredObjectException.prototype = Object.create(BaseException.prototype);
+RegisteredObjectException.prototype.constructor = RegisteredObjectException;
