@@ -32,6 +32,39 @@ const RestaurantsManager = (function () {
             return this.#restaurants[Symbol.iterator]();
         }
 
+        addCategory(category) {
+            if (!(category instanceof Category)) throw new InvalidObjectException();
+
+            if (this.#categories.has(category.getName())) throw new RegisteredObjectException();
+
+            this.#categories.set(category.getName(), category);
+            return this;
+        }
+
+        removeCategory(category) {
+            if (!category) {
+                throw new EmptyValueException();
+            }
+
+            if (!this.#categories.has(category.getName())) {
+                throw new NonRegisteredObjectException();
+            }
+
+
+            // Desasignar la categoría de todos los platos
+            this.#dishes.forEach(dish => {
+                const index = dish.dishCategory.findIndex(cat => cat.getName() === category.getName());
+                if (index !== -1) {
+                    dish.dishCategory.splice(index, 1);
+                }
+            });
+
+            // Eliminar la categoría del mapa de categorías
+            this.#categories.delete(category.getName());
+
+            return this; // Retornar la instancia para encadenar
+        }
+
     }
 
     // Función con la que crearemos la instancia 
