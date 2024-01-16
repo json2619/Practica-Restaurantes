@@ -229,6 +229,182 @@ const RestaurantsManager = (function () {
             return this;
         }
 
+        assignAllergenToDish(allergen, dish) {
+            if (!allergen || !dish) {
+                throw new EmptyValueException();
+            }
+
+            // Verificar si la categoría y el plato existen en el sistema
+            if (this.#allergens.has(allergen.getName())) {
+
+                if (this.#dishes.has(dish.getName())) {
+                    // Obtener el plato existente
+                    const actualDish = this.#dishes.get(dish.getName());
+                    // Actualizar la información de los alérgenos en el mapa dishes
+                    actualDish.dishAllergens.push(allergen);
+                } else {
+                    this.addDish(dish);
+                }
+
+            } else {
+                this.addAllergen(allergen);
+
+                // Agregar la categoría al array de categorías del plato
+                this.#dishes.get(dish.getName()).dishAllergens.push(allergen);
+            }
+
+            return this;
+        }
+
+        deassignAllergenToDish(allergen, dish) {
+            // Verificar si la categoría y el plato son objetos válidos
+            if (!allergen || !dish) {
+                throw new EmptyValueException();
+            }
+
+            // Obtener la posición del alergeno que queremos quitar
+            if (this.#allergens.has(allergen.getName()) && this.#dishes.has(dish.getName())) {
+                for (let [name, value] of this.#dishes) {
+
+                    let pos = value.dishAllergens.findIndex((element) => element.getName() === allergen.getName());
+
+                    if (pos !== -1) {
+                        value.dishAllergens.splice(pos, 1);
+                        break;
+                    }
+                }
+
+            }
+
+            return this;
+        }
+
+        assignDishToMenu(menu, dish) {
+            // Verificar si la categoría y el plato son objetos válidos
+            if (!menu || !dish) {
+                throw new EmptyValueException();
+            }
+
+            // Verificar si la categoría y el plato existen en el sistema
+            if (this.#menus.has(menu.getName())) {
+                // Obtener la categoría existente y el plato existente
+                const actualMenu = this.#menus.get(menu.getName());
+
+                if (this.#dishes.has(dish.getName())) {
+                    // Actualizar la información del plato en el mapa de platos
+                    actualMenu.dishMenuArr.push(dish);
+                } else {
+                    this.addDish(dish);
+                }
+
+            } else {
+                this.addMenu(menu);
+                this.#menus.get(menu.getName()).dishMenuArr.push(dish);
+            }
+
+            return this;
+        }
+
+        deassignDishToMenu(menu, dish) {
+            // Verificar si la categoría y el plato son objetos válidos
+            if (!menu || !dish) {
+                throw new EmptyValueException();
+            }
+
+            // Obtener la posición del alergeno que queremos quitar
+            if (this.#menus.has(menu.getName()) && this.#dishes.has(dish.getName())) {
+                for (let [name, value] of this.#menus) {
+
+                    let pos = value.dishMenuArr.findIndex((element) => element.getName() === dish.getName());
+
+                    if (pos !== -1) {
+                        value.dishMenuArr.splice(pos, 1);
+                        break; // Si se encuentra, salimos del bucle externo
+                    }
+                }
+
+            }
+
+            return this;
+        }
+
+        changeDishesPositionsInMenu(menu, dish1, dish2) {
+            // Verificar si el menú está registrado y es válido
+            if (!menu || !dish1 || !dish2) {
+                throw new EmptyValueException();
+            }
+
+            if (this.#menus.has(menu.getName()) && this.#dishes.has(dish1.getName()) && this.#dishes.has(dish2.getName())) {
+                const dishMenu = this.#menus.get(menu.getName()).dishMenuArr;
+
+                // Intercambiar las posiciones de los platos
+                const index1 = dishMenu.indexOf(dish1);
+                const index2 = dishMenu.indexOf(dish2);
+
+                [dishMenu[index1], dishMenu[index2]] = [dishMenu[index2], dishMenu[index1]];
+            }
+
+
+            return this; // Retornar la instancia para encadenar
+        }
+
+        getDishesInCategory(category, order = null) {
+            if (!category) {
+                throw new EmptyValueException();
+            }
+
+            if (!this.#categories.has(category.getName())) {
+                throw new NonRegisteredObjectException();
+            }
+
+            const filteredDishes = [];
+
+            for (const [name, value] of this.#dishes) {
+                if (value.dishCategory.some(cat => cat.getName() === category.getName())) {
+                    filteredDishes.push(value.newDish);
+                }
+            }
+
+            return filteredDishes[Symbol.iterator]();
+        }
+
+        getDishesWithAllergen(allergen, order = null) {
+            if (!allergen) {
+                throw new EmptyValueException();
+            }
+
+            if (!this.#allergens.has(allergen.getName())) {
+                throw new NonRegisteredObjectException();
+            }
+
+            const filteredDishes = [];
+
+            for (const [name, value] of this.#dishes) {
+                if (value.dishAllergens.some(alg => alg.getName() === allergen.getName())) {
+                    filteredDishes.push(value.newDish);
+                }
+            }
+
+            return filteredDishes[Symbol.iterator]();
+        }
+
+        findDishes(search = null, order = null) {
+            if (!search || typeof search !== 'function') {
+                throw new NotFunctionException();
+            }
+
+            const dishIterator = this.#dishes.values();
+            const filteredDishes = Array.from(dishIterator).filter(search);
+
+            if (order) {
+                filteredDishes.sort(order);
+            }
+
+            return filteredDishes[Symbol.iterator]();
+        }
+
+
+
     }
 
     // Función con la que crearemos la instancia 
