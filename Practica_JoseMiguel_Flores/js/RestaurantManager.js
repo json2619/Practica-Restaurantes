@@ -126,6 +126,60 @@ const RestaurantsManager = (function () {
             return this; // Retornar la instancia para encadenar
         }
 
+        addDish(dish) {
+            if (!dish) {
+                throw new EmptyValueException();
+            }
+
+            if (this.#dishes.has(dish.getName())) {
+                throw new RegisteredObjectException();
+            }
+
+            this.#dishes.set(dish.getName(), {
+                newDish: dish,
+                dishCategory: [],
+                dishAllergens: [],
+            });
+            return this;
+        }
+
+        removeDish(dish) {
+            if (!dish) {
+                throw new EmptyValueException();
+            }
+
+            if (!this.#dishes.has(dish.getName())) {
+                throw new NonRegisteredObjectException();
+            }
+
+            this.#dishes.delete(dish.getName());
+            return this;
+        }
+
+        addRestaurant(restaurant) {
+            if (!restaurant) {
+                throw new EmptyValueException();
+            }
+
+            if (this.#restaurants.has(restaurant.getName())) {
+                throw new RegisteredObjectException();
+            }
+
+            this.#restaurants.set(restaurant.getName(), restaurant);
+            return this;
+        }
+
+        removeRestaurant(restaurant) {
+            if (!this.#restaurants.has(restaurant.getName())) {
+                throw new Error('El restaurante no está registrado.');
+            }
+
+            this.#restaurants.delete(restaurant.getName());
+            return this;
+        }
+
+
+
     }
 
     // Función con la que crearemos la instancia 
