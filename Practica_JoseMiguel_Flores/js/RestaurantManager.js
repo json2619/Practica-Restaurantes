@@ -16,7 +16,7 @@ const RestaurantsManager = (function () {
             this.#name = name;
         }
 
-        etCategories() {
+        getCategories() {
             return this.#categories[Symbol.iterator]();
         }
 
