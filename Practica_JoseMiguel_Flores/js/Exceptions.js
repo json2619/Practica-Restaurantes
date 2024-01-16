@@ -53,3 +53,21 @@ function RegisteredObjectException() {
 
 RegisteredObjectException.prototype = Object.create(BaseException.prototype);
 RegisteredObjectException.prototype.constructor = RegisteredObjectException;
+
+function NonRegisteredObjectException() {
+    let instance = BaseException.call(this, "El objeto no está registrado");
+    instance.name = "NonRegisteredObjectException";
+    return instance;
+}
+
+NonRegisteredObjectException.prototype = Object.create(BaseException.prototype);
+NonRegisteredObjectException.prototype.constructor = NonRegisteredObjectException;
+
+function NotFunctionException() {
+    let instance = BaseException.call(this, "El objeto no está registrado");
+    instance.name = "NotFunctionException";
+    return instance;
+}
+
+NotFunctionException.prototype = Object.create(BaseException.prototype);
+NotFunctionException.prototype.constructor = NotFunctionException;
