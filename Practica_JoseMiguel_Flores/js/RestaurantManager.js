@@ -403,7 +403,80 @@ const RestaurantsManager = (function () {
             return filteredDishes[Symbol.iterator]();
         }
 
+        // Metodo que crea un plato y devuelve un objeto dish
+        createDish(name, description, ingredients) {
+            // Declaramos la variable plato que vamos a devolver
+            let dish;
 
+            if (this.#dishes.has(name)) {
+                dish = this.#dishes.get(name).dish;
+            } else {
+                dish = new Dish(name, description, ingredients);
+            }
+
+            // Devolvemos el plato
+            return dish;
+        }
+
+        // Metodo que crea un menu y devuelve un objeto menu
+        createMenu(name, description) {
+            // Variable menu que vamos a devolver
+            let menu;
+
+            if (this.#menus.has(name)) {
+                menu = this.#menus.get(name).menu;
+            } else {
+                menu = new Menu(name, description);
+            }
+
+            // Devolvemos el menu
+            return menu;
+        }
+
+        // Metodo que crea un alergeno y devuelve un objeto allergen
+        createAllergen(name, description) {
+            // Variable alergeno que vamos a devolver
+            let allergen;
+
+            if (this.#allergens.has(name)) {
+                allergen = this.#allergens.get(name).allergen;
+            } else {
+                allergen = new Allergen(name, description);
+            }
+
+            // Devolvemos el alergeno
+            return allergen;
+        }
+
+        // Metodo que crea una categoria y devuelve un objeto Category
+        createCategory(name, description) {
+            // Variable caategory que vamos a devolver
+            let category;
+
+            if (this.#categories.has(name)) {
+                category = this.#categories.get(name).category;
+            } else {
+                category = new Category(name, description);
+            }
+
+            // Devolvemos la categoria
+            return category;
+        }
+
+        // Metodo que crea un restaurante y devuelve un objeto restaurant
+        createRestaurant(name, description, location) {
+            // Variable restaurant que vamos a devolver
+            let restaurant;
+
+            if (this.#restaurants.has(name)) {
+                restaurant = this.#restaurants.get(name).restaurant;
+            } else {
+                restaurant = new Restaurant(name, description, location);
+            }
+
+            // Devolvemos el restaurante
+            return restaurant;
+        }
 
     }
 
